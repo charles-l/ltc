@@ -10,14 +10,36 @@ function rep(str, pos, r)
     return str:sub(1, pos-1) .. r .. str:sub(pos+1)
 end
 
+function keyn(T) -- number of keys in a table
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+function serialize(T)
+    o = "{"
+    for k,v in pairs(T) do
+        o = o .. string.char(v) .. k .. ","
+    end
+    o = o:gsub(",$", "") .. "}"
+    return o
+end
+
+function getcontents(filename)
+    local f = io.open(filename, "rb")
+    local content = f:read("*all")
+    f:close()
+    return content
+end
+
 function compress(s)
     local vowels = {"a", "e", "i", "o", "u"}
     local consonents = {"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"}
     s = s:lower()
-   
+
     s = s:gsub("[;,.'\"]","")
     s = s:gsub("you", "u")
-    s = s:gsub("[^ ]u^[ ]", "o")
+    s = s:gsub("[^ ]u[^ ]", "o")
     s = s:gsub("es", "z")
     s = s:gsub("see", "c")
     s = s:gsub("and", "&")
@@ -76,15 +98,39 @@ function decompress(s)
     return s
 end
 
-function getcontents(filename)
-    local f = io.open(filename, "rb")
-    local content = f:read("*all")
+function legit_compression(s)
+    -- actually (somewhat) useful.
+    -- uses slightly lossy lzw compression
+    -- TODO: expand on 255 char
+    local d = {}
+
+    for i = 1, string.len(s) do -- first pass
+        local c = string.sub(s, i, i)
+        if d[c] == nil then
+            d[c] = keyn(d)
+        end
+    end
+
+    local f = io.open("out.bin", "wb")
+    for i = 1, string.len(s) do -- compression
+        local c = string.sub(s, i, i)
+        local nc = string.sub(s, i + 1, i + 1)
+        f:write(string.char(d[c]))
+        if d[c .. nc] == nil then
+            d[c .. nc] = keyn(d)
+        end
+    end
+    f:write(serialize(d)) -- write the dict
     f:close()
-    return content
 end
 
-local orig = getcontents("test.txt")
+function legit_decompression(s)
+end
+
+local orig = getcontents("test/pg11.txt")
 local s = compress(orig)
+legit_compression(s)
+legit_decompression(getcontents("out.bin"))
 print(s)
 print(decompress(s))
 
