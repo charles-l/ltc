@@ -51,7 +51,7 @@ function decompress(s)
             s = rep(s, i, samp("o", "u"))
         end
         if c == "z" then
-            s = rep(s, i, samp("z", "s"))
+            s = rep(s, i, samp("z", "s", "es"))
         end
     end
     s = s:gsub(" th ", " teh ")
