@@ -20,6 +20,7 @@ function compress(s)
     s = s:gsub("[^ ]u^[ ]", "o")
     s = s:gsub("es", "z")
     s = s:gsub("see", "c")
+    s = s:gsub("and", "&")
 
     s = s:gsub("ate", "8")
     s = s:gsub("one", "1")
