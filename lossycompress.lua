@@ -41,12 +41,13 @@ function compress(s)
     s = s:gsub("oo", "o")
     s = s:gsub("ss", "s")
     s = s:gsub("tt", "t")
+    s = s:gsub("gh", "g")
     s = s:lower()
 
     for i = 1, string.len(s) do
         local c = string.sub(s, i, i)
         if c == " " then
-            s = rep(s, i, samp(" ", " ", " ", "  ", "a", ""))
+            s = rep(s, i, samp(" ", " ", " ", " ", " ", " ", " ", ""))
         end
     end
     return s
