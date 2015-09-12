@@ -12,8 +12,8 @@ end
 
 function compress(s)
     s = s:gsub("[;,.'\"]","")
-    s = s:gsub("u", "o")
     s = s:gsub("you", "u")
+    s = s:gsub("[^ ]u^[ ]", "o")
     s = s:gsub("es", "z")
 
     s = s:gsub("ate", "8")
@@ -42,6 +42,13 @@ function compress(s)
     s = s:gsub("ss", "s")
     s = s:gsub("tt", "t")
     s = s:lower()
+
+    for i = 1, string.len(s) do
+        local c = string.sub(s, i, i)
+        if c == " " then
+            s = rep(s, i, samp(" ", " ", " ", "  ", "a", ""))
+        end
+    end
     return s
 end
 
