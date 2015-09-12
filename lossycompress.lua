@@ -83,6 +83,11 @@ function getcontents(filename)
     return content
 end
 
-local s = compress(getcontents("test.txt"))
+local orig = getcontents("test.txt")
+local s = compress(orig)
 print(s)
 print(decompress(s))
+
+-- print some stats
+savings = string.len(orig) - string.len(s)
+print("saved ".. savings .." chars (".. math.floor(savings / string.len(orig) * 100 + 0.5) .."%)")
