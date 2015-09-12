@@ -11,6 +11,7 @@ function rep(str, pos, r)
 end
 
 function compress(s)
+    s = s:gsub("[;,.'\"]","")
     s = s:gsub("u", "o")
     s = s:gsub("you", "u")
     s = s:gsub("es", "z")
@@ -27,7 +28,7 @@ function compress(s)
 
     s = s:gsub("s", "z")
     s = s:gsub("e[aeiou]", "e")
-    s = s:gsub("e[. ]", " ")
+    s = s:gsub("e ", " ")
     s = s:gsub("bb", "b")
     s = s:gsub("cc", "c")
     s = s:gsub("dd", "d")
@@ -55,7 +56,6 @@ function decompress(s)
         end
     end
     s = s:gsub(" th ", " teh ")
-    s = s:gsub("[;,.]","")
     return s
 end
 
