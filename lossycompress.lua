@@ -47,6 +47,7 @@ function compress(s)
     s = s:gsub("pp", "p")
     s = s:gsub("ss", "s")
     s = s:gsub("tt", "t")
+    s = s:gsub("zz", "z") -- can sometimes happen when a double s is turned into a double z
     s = s:gsub("gh", "g")
     s = s:gsub("[^ ]th["..table.concat(vowels).."]", "d")
 
