@@ -11,8 +11,7 @@ function rep(str, pos, r)
 end
 
 function compress(s)
-   vowels = {"a", "e", "i", "o", "u"}
-   consonents = {"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"}
+    s = s:lower()
    
     s = s:gsub("[;,.'\"]","")
     s = s:gsub("you", "u")
@@ -47,7 +46,6 @@ function compress(s)
     s = s:gsub("ss", "s")
     s = s:gsub("tt", "t")
     s = s:gsub("gh", "g")
-    s = s:lower()
 
     for i = 1, string.len(s) do
         local c = string.sub(s, i, i)
