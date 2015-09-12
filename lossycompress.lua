@@ -21,8 +21,10 @@ function compress(s)
     s = s:gsub("es", "z")
     s = s:gsub("see", "c")
     s = s:gsub("and", "&")
+    s = s:gsub("please", "plz") -- really specific, but couldn't think of any other case where 'ease' can be turned into just 'z'
 
     s = s:gsub("ate", "8")
+    s = s:gsub("eat", "8")
     s = s:gsub("one", "1")
     s = s:gsub("won", "1")
     s = s:gsub("to", "2")
@@ -50,7 +52,6 @@ function compress(s)
     s = s:gsub("tt", "t")
     s = s:gsub("zz", "z") -- can sometimes happen when a double s is turned into a double z
     s = s:gsub("gh", "g")
-    s = s:gsub("[^ ]th["..table.concat(vowels).."]", "d")
 
     for i = 1, string.len(s) do
         local c = string.sub(s, i, i)
