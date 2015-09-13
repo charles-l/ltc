@@ -127,10 +127,10 @@ function legit_compression(s)
 end
 
 function legit_decompression(s)
-    local ds = (function() -- parse out dictionary string
+    local ds, len = (function() -- parse out dictionary string
         for i=string.len(s), 0, -1 do
             if string.sub(s, i, i) == '{' then
-                return string.sub(s, i, string.len(s))
+                return string.sub(s, i, string.len(s)), i
             end
         end
     end)()
@@ -140,7 +140,7 @@ function legit_decompression(s)
         d[w:sub(1, 1)] = w:sub(2, w:len())
     end
 
-    for i = 1, string.len(s) do
+    for i = 1, len - 1 do
         local c = string.sub(s, i, i)
         if d[c] ~= nil then
             o = o .. d[c]
