@@ -100,11 +100,12 @@ function decompress(s)
     return s
 end
 
-function legit_compression(s)
+function legit_compress(s)
     -- actually (somewhat) useful.
     -- uses slightly lossy lzw compression
     -- TODO: expand on 255 char
     local d = {}
+    o = ""
 
     for i = 1, string.len(s) do -- first pass
         local c = string.sub(s, i, i)
@@ -113,20 +114,18 @@ function legit_compression(s)
         end
     end
 
-    local f = io.open("out.bin", "wb")
     for i = 1, string.len(s) do -- compression
         local c = string.sub(s, i, i)
         local nc = string.sub(s, i + 1, i + 1)
-        f:write(string.char(d[c]))
+        o = o .. string.char(d[c])
         if d[c .. nc] == nil then
             d[c .. nc] = keyn(d)
         end
     end
-    f:write(serialize(d)) -- write the dict
-    f:close()
+    return o .. serialize(d)
 end
 
-function legit_decompression(s)
+function legit_decompress(s)
     local ds, len = (function() -- parse out dictionary string
         for i=string.len(s), 0, -1 do
             if string.sub(s, i, i) == '{' then
@@ -146,9 +145,36 @@ function legit_decompression(s)
             o = o .. d[c]
         end
     end
-    print("-----")
-    print(o)
-    print("-----")
+    return o
+end
+
+if arg[1] == "-c" then -- compress
+    if not arg[2] then
+        print("must pass a filename!")
+        os.exit(2)
+    end
+    local fname = arg[2]:gmatch('(.+)%.')() .. ".ltc"
+    local f = io.open(fname, 'wb')
+    f:write(legit_compress(compress(getcontents(arg[2]))))
+    f:close()
+
+    -- print some stats
+    local osize = string.len(getcontents(arg[2]))
+    local savings = osize - string.len(getcontents(fname))
+    print("saved ".. savings .." chars (".. math.floor(savings / osize * 100 + 0.5) .."%)")
+
+    os.exit(0)
+end
+
+if arg[1] == "-d" then -- decompress
+    if not arg[2] then
+        print("must pass a filename!")
+        os.exit(2)
+    end
+    local o = io.open(arg[2]:gmatch('(.+)%.')() .. "_u.txt", 'wb')
+    o:write(decompress(legit_decompress(getcontents(arg[2]))))
+    o:close()
+    os.exit(0)
 end
 
 local orig = getcontents("test.txt")
@@ -158,6 +184,3 @@ legit_decompression(getcontents("out.bin"))
 print(s)
 print(decompress(s))
 
--- print some stats
-savings = string.len(orig) - string.len(s)
-print("saved ".. savings .." chars (".. math.floor(savings / string.len(orig) * 100 + 0.5) .."%)")
