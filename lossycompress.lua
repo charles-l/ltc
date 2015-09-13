@@ -75,12 +75,14 @@ function compress(s)
     s = s:gsub("zz", "z") -- can sometimes happen when a double s is turned into a double z
     s = s:gsub("gh", "g")
 
+    --[[
     for i = 1, string.len(s) do
         local c = string.sub(s, i, i)
         if c == " " then
             s = rep(s, i, samp(" ", " ", " ", " ", " ", ""))
         end
     end
+    ]]--
     return s
 end
 
@@ -125,9 +127,31 @@ function legit_compression(s)
 end
 
 function legit_decompression(s)
+    local ds = (function() -- parse out dictionary string
+        for i=string.len(s), 0, -1 do
+            if string.sub(s, i, i) == '{' then
+                return string.sub(s, i, string.len(s))
+            end
+        end
+    end)()
+    local d = {}
+    o = ""
+    for w in ds:gmatch('([^,]+)') do
+        d[w:sub(1, 1)] = w:sub(2, w:len())
+    end
+
+    for i = 1, string.len(s) do
+        local c = string.sub(s, i, i)
+        if d[c] ~= nil then
+            o = o .. d[c]
+        end
+    end
+    print("-----")
+    print(o)
+    print("-----")
 end
 
-local orig = getcontents("test/pg11.txt")
+local orig = getcontents("test.txt")
 local s = compress(orig)
 legit_compression(s)
 legit_decompression(getcontents("out.bin"))
