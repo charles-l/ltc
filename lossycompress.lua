@@ -177,10 +177,6 @@ if arg[1] == "-d" then -- decompress
     os.exit(0)
 end
 
-local orig = getcontents("test.txt")
-local s = compress(orig)
-legit_compression(s)
-legit_decompression(getcontents("out.bin"))
-print(s)
-print(decompress(s))
-
+print("usage: ltc [OPTION] [FILENAME]")
+print("       -c     compress file")
+print("       -d   decompress file")
