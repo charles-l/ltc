@@ -136,7 +136,7 @@ function legit_decompression(s)
     end)()
     local d = {}
     o = ""
-    for w in ds:gmatch('([^,]+)') do
+    for w in ds:gmatch('([^,]+)[^}]') do
         d[w:sub(1, 1)] = w:sub(2, w:len())
     end
 
