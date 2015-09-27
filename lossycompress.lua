@@ -157,7 +157,9 @@ if arg[1] == "-c" then -- compress
     end
     local fname = arg[2]:gmatch('(.+)%.')() .. ".ltc"
     local f = io.open(fname, 'wb')
-    f:write(legit_compress(compress(getcontents(arg[2]))))
+    -- legit_compress seems broken atm
+    -- f:write(legit_compress(compress(getcontents(arg[2]))))
+    f:write(compress(getcontents(arg[2])))
     f:close()
 
     -- print some stats
@@ -174,7 +176,8 @@ if arg[1] == "-d" then -- decompress
         os.exit(2)
     end
     local o = io.open(arg[2]:gmatch('(.+)%.')() .. "_u.txt", 'wb')
-    o:write(decompress(legit_decompress(getcontents(arg[2]))))
+    -- o:write(decompress(legit_decompress(getcontents(arg[2]))))
+    o:write(decompress((getcontents(arg[2])))
     o:close()
     os.exit(0)
 end
