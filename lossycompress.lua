@@ -177,7 +177,7 @@ if arg[1] == "-d" then -- decompress
     end
     local o = io.open(arg[2]:gmatch('(.+)%.')() .. "_u.txt", 'wb')
     -- o:write(decompress(legit_decompress(getcontents(arg[2]))))
-    o:write(decompress((getcontents(arg[2])))
+    o:write(decompress((getcontents(arg[2]))))
     o:close()
     os.exit(0)
 end
