@@ -155,7 +155,7 @@ if arg[1] == "-c" then -- compress
         print("must pass a filename!")
         os.exit(2)
     end
-    local fname = arg[2]:gmatch('(.+)%.')() .. ".ltc"
+    local fname = arg[2]:gmatch('[^%.]+')() .. ".ltc"
     local f = io.open(fname, 'wb')
     -- legit_compress seems broken atm
     -- f:write(legit_compress(compress(getcontents(arg[2]))))
@@ -175,7 +175,7 @@ if arg[1] == "-d" then -- decompress
         print("must pass a filename!")
         os.exit(2)
     end
-    local o = io.open(arg[2]:gmatch('(.+)%.')() .. "_u.txt", 'wb')
+    local o = io.open(arg[2]:gmatch('[^%.]+')() .. "_u.txt", 'wb')
     -- o:write(decompress(legit_decompress(getcontents(arg[2]))))
     o:write(decompress((getcontents(arg[2]))))
     o:close()
