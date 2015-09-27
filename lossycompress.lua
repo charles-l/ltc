@@ -42,7 +42,7 @@ function compress(s)
     s = s:gsub("[^ ]u[^ ]", "o")
     s = s:gsub("es", "z")
     s = s:gsub("see", "c")
-    s = s:gsub("and", "&")
+    s = s:gsub(" and ", " & ")
     s = s:gsub("please", "plz") -- really specific, but couldn't think of any other case where 'ease' can be turned into just 'z'
     s = s:gsub("okay", "k")
 
